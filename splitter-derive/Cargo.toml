@@ -3,7 +3,7 @@ name = "splitter-derive"
 version = "0.1.0"
 edition = "2021"
 authors = ["Lukas3674 <lukashassler@web.de>"]
-repository = "https://github.com/Lukas3674/splitter"
+repository = "https://github.com/Lukas3674/rust-splitter"
 license = "MIT"
 description = "Splitter derive macro"
 
