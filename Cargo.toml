@@ -8,7 +8,7 @@ repository = "https://github.com/Lukas3674/rust-splitter"
 documentation = "https://docs.rs/splitter"
 license = "MIT"
 description = "A string and slice splitter library"
-keywords = ["splitter", "string", "slice", "no-std"]
+keywords = ["splitter", "string", "lexer", "slice", "no-std"]
 categories = ["no-std"]
 
 [workspace]
