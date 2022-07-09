@@ -24,4 +24,4 @@ derive = ["dep:splitter-derive"]
 full = ["std", "impls", "infos", "derive"]
 
 [dependencies]
-splitter-derive = { version = "*", optional = true }
+splitter-derive = { version = "0.1.0", optional = true }
