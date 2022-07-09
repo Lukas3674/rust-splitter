@@ -1,6 +1,6 @@
 [package]
 name = "splitter"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Lukas3674 <lukashassler@web.de>"]
 edition = "2021"
 readme = "README.md"
@@ -8,7 +8,7 @@ repository = "https://github.com/Lukas3674/rust-splitter"
 documentation = "https://docs.rs/splitter"
 license = "MIT"
 description = "A string and slice splitter library"
-keywords = ["splitter", "string", "slice"]
+keywords = ["splitter", "string", "slice", "no-std"]
 categories = ["no-std"]
 
 [workspace]
