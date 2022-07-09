@@ -26,6 +26,7 @@ where
     S: StrSeparator,
 {
     /// internally uses a [`Splitter`] over a byte slice
+    #[allow(clippy::type_complexity)]
     splitter: Splitter<'a, u8, &'a [u8], S, fn(&'a [u8]) -> NonZeroUsize>,
     ctx: I::Context,
 }
@@ -42,7 +43,7 @@ where
     pub fn new(content: &'a str, sep: S) -> Self {
 
         /// Override for the increment of the cursor, to the size of the next [`char`]
-        fn increment<'a>(s: &'a [u8]) -> NonZeroUsize {
+        fn increment(s: &[u8]) -> NonZeroUsize {
             let next = from_utf8(s).expect("valid utf8").chars().next();
             // SAFETY: This function will only be called when the content is
             // not empty, meaning there is at least one char.

@@ -41,7 +41,7 @@ where
     pub fn new(content: &'a [T], sep: S) -> Self {
 
         /// the default increment of the cursor, when the separator size is zero
-        const fn increment<'a, T>(_: &'a [T]) -> NonZeroUsize {
+        const fn increment<T>(_: &[T]) -> NonZeroUsize {
             // SAFETY: constant 1
             unsafe { NonZeroUsize::new_unchecked(1) }
         }
