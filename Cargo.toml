@@ -1,0 +1,27 @@
+[package]
+name = "splitter"
+version = "0.1.0"
+authors = ["Lukas3674 <lukashassler@web.de>"]
+edition = "2021"
+readme = "README.md"
+repository = "https://github.com/Lukas3674/splitter"
+documentation = "https://docs.rs/splitter"
+license = "MIT"
+description = "A string and slice splitter library"
+keywords = ["splitter", "string", "slice"]
+categories = ["no-std"]
+
+[workspace]
+members = [
+    "splitter-derive",
+]
+
+[features]
+std = []
+impls = []
+infos = []
+derive = ["dep:splitter-derive"]
+full = ["std", "impls", "infos", "derive"]
+
+[dependencies]
+splitter-derive = { version = "*", optional = true }
