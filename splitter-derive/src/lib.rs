@@ -60,7 +60,7 @@ pub fn info(input: TokenStream) -> TokenStream {
                 use super::*;
 
                 pub struct #cident<#(#ol1,)* #(#ls,)* #(#ts: #bs,)* #(const #cs: #cts,)*> {
-                    #(pub #idents: <#types as Info<#l, #t>>::Context,)*
+                    #(pub(super) #idents: <#types as Info<#l, #t>>::Context,)*
                 }
 
                 impl<#(#ol2,)* #(#ls,)* #(#ts: #bs,)* #(const #cs: #cts,)*> Default
@@ -134,7 +134,7 @@ pub fn str_info(input: TokenStream) -> TokenStream {
                 use super::*;
 
                 pub struct #cident<#(#ol1,)* #(#ls,)* #(#ts: #bs,)* #(const #cs: #cts,)*> {
-                    #(pub #idents: <#types as StrInfo<#l>>::Context,)*
+                    #(pub(super) #idents: <#types as StrInfo<#l>>::Context,)*
                 }
 
                 impl<#(#ol2,)* #(#ls,)* #(#ts: #bs,)* #(const #cs: #cts,)*> Default
@@ -159,4 +159,3 @@ pub fn str_info(input: TokenStream) -> TokenStream {
         panic!("Can only derive 'StrInfo' on structs");
     }
 }
-
