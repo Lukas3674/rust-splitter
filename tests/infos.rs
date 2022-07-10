@@ -17,7 +17,7 @@ fn span() {
 
 #[test]
 fn str_span() {
-    use splitter::string::info::span::Span;
+    use splitter::str_info::span::Span;
     let sp = StrSplitter::new("12534", "5").with_info::<Span>();
     assert_eq!(
         sp.collect::<Vec<_>>(),
@@ -31,7 +31,7 @@ fn str_span() {
 
 #[test]
 fn str_pos() {
-    use splitter::string::info::pos::Pos;
+    use splitter::str_info::pos::Pos;
     let sp = StrSplitter::new("12\n534\n657\n", "5").with_info::<Pos>();
     assert_eq!(
         sp.collect::<Vec<_>>(),

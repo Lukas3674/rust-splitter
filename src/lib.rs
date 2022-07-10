@@ -100,11 +100,13 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
+mod string;
 mod splitter;
 
 pub mod info;
-pub mod string;
 pub mod separator;
+
+pub use { string::info as str_info, string::separator as str_separator };
 
 #[cfg(feature = "derive")]
 pub use splitter_derive::*;
