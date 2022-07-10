@@ -11,6 +11,9 @@ description = "A string and slice splitter library"
 keywords = ["splitter", "string", "lexer", "slice", "no-std"]
 categories = ["no-std"]
 
+[package.metadata.docs.rs]
+features = ["full"]
+
 [workspace]
 members = [
     "splitter-derive",
@@ -24,4 +27,4 @@ derive = ["dep:splitter-derive"]
 full = ["std", "impls", "infos", "derive"]
 
 [dependencies]
-splitter-derive = { version = "0.1.0", optional = true }
+splitter-derive = { path = "splitter-derive", optional = true }
