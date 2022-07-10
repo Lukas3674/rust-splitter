@@ -1,11 +1,12 @@
 [package]
 name = "splitter-derive"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Lukas3674 <lukashassler@web.de>"]
 repository = "https://github.com/Lukas3674/rust-splitter"
 license = "MIT"
 description = "Splitter derive macro"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
