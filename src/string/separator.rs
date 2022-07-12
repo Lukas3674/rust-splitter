@@ -28,6 +28,27 @@ impl StrSeparator for &str {
     }
 }
 
+impl StrSeparator for &[char] {
+    fn str_separate(&self, s: &str) -> Option<SepInfo> {
+        self.iter().filter_map(|ss| ss.str_separate(s))
+            .min_by_key(|SepInfo { pos, size: _ }| *pos)
+    }
+}
+
+impl<const N: usize> StrSeparator for &[char; N] {
+    fn str_separate(&self, s: &str) -> Option<SepInfo> {
+        self.iter().filter_map(|ss| ss.str_separate(s))
+            .min_by_key(|SepInfo { pos, size: _ }| *pos)
+    }
+}
+
+impl<const N: usize> StrSeparator for [char; N] {
+    fn str_separate(&self, s: &str) -> Option<SepInfo> {
+        self.iter().filter_map(|ss| ss.str_separate(s))
+            .min_by_key(|SepInfo { pos, size: _ }| *pos)
+    }
+}
+
 impl StrSeparator for &[&str] {
     fn str_separate(&self, s: &str) -> Option<SepInfo> {
         self.iter().filter_map(|ss| ss.str_separate(s))
