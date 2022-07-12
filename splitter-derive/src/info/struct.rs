@@ -21,7 +21,7 @@ pub fn parse<I: Iterator<Item = Ident>>(
         let next_l = generics.lifetimes().next();
         if !next_l.is_some() {
             generics.params.push(GenericParam::Lifetime(
-                LifetimeDef::new(Lifetime::new("_splitter", Span::call_site().into()))
+                LifetimeDef::new(Lifetime::new("'_splitter", Span::call_site().into()))
             ));
         }
 
