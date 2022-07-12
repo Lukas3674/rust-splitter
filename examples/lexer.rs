@@ -2,28 +2,22 @@
 use core::ops::Range;
 use splitter::{StrInfo, StrSplitter};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, StrInfo)]
 enum TType {
+    #[splitter(" " | "\t" | "\n" | "\r")]
     Whitespace,
-    Bool,
-    Operator,
-    Idenifier,
-    Unknown,
-}
 
-impl<'a> StrInfo<'a> for TType {
-    type Context = ();
-    fn generate(_: &mut Self::Context, s: &'a str) -> Self {
-        match s {
-            " " => TType::Whitespace,
-            "true" | "false" => TType::Bool,
-            "||" | "&&" => TType::Operator,
-            s if s.chars().all(char::is_alphabetic) => {
-                TType::Idenifier
-            }
-            _ => TType::Unknown,
-        }
-    }
+    #[splitter("true" | "false")]
+    Bool,
+
+    #[splitter("||" | "&&")]
+    Operator,
+
+    #[splitter(s if s.chars().all(char::is_alphabetic))]
+    Idenifier,
+
+    #[splitter(_)]
+    Unknown,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, StrInfo)]
