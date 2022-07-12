@@ -9,42 +9,41 @@ use syn::{
 pub fn parse<I: Iterator<Item = Ident>>(
     ident: Ident,
     data: DataStruct,
-    mut generics: Generics,
+    base_generics: Generics,
     mut attrs: I,
 ) -> TokenStream {
     if data.fields.is_empty() {
         super::empty::generate(ident)
     } else {
+        let attr = attrs.next();
+
         let cident = format_ident!("{}Ctx", ident);
         let mident = format_ident!("{}_ctx", ident.to_string().to_lowercase());
 
-        let next_l = generics.lifetimes().next();
-        if !next_l.is_some() {
-            generics.params.push(GenericParam::Lifetime(
-                LifetimeDef::new(Lifetime::new("'_splitter", Span::call_site().into()))
-            ));
+        let mut generics = base_generics.clone();
+        if base_generics.lifetimes().next().is_none() {
+            generics.params.push(GenericParam::Lifetime(LifetimeDef::new(
+                Lifetime::new("'_splitter", Span::call_site().into())
+            )));
+        }
+        if attr.is_none() && base_generics.type_params().next().is_none() {
+            generics.params.push(GenericParam::Type(TypeParam::from(Ident::new(
+                "_SPLITTER", Span::call_site().into()
+            ))));
         }
 
-        let attr_t = attrs.next();
-        let next_t = generics.type_params().next();
-        if !attr_t.is_some() && !next_t.is_some() {
-            generics.params.push(GenericParam::Type(
-                TypeParam::from(Ident::new("_SPLITTER", Span::call_site().into()))
-            ));
-        }
-
-        let ref l = generics.lifetimes().next().expect("unreachable").lifetime;
-
-        let t = attr_t.as_ref().unwrap_or_else(
+        let l = &generics.lifetimes().next().expect("unreachable").lifetime;
+        let t = attr.as_ref().unwrap_or_else(
             || &generics.type_params().next().expect("unreachable").ident
         );
 
+        let (_, base_ty, _) = base_generics.split_for_impl();
         let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
         let (ctx, ctx_con, ge_con) = match data.fields {
             Fields::Unnamed(fields) => unnamed(fields, l, t),
             Fields::Named(fields) => named(fields, l, t),
-            Fields::Unit => unreachable!(),
+            Fields::Unit => unreachable!("a"),
         };
 
         TokenStream::from(quote! {
@@ -55,7 +54,7 @@ pub fn parse<I: Iterator<Item = Ident>>(
                     fn default() -> Self { #ctx_con }
                 }
             }
-            impl #impl_generics Info<#l, #t> for #ident #ty_generics #where_clause {
+            impl #impl_generics Info<#l, #t> for #ident #base_ty #where_clause {
                 type Context = #mident::#cident #ty_generics;
                 fn generate(ctx: &mut Self::Context, ts: &#l [#t]) -> Self { #ge_con }
             }

@@ -9,7 +9,7 @@ use syn::{
 pub fn parse(
     ident: Ident,
     data: DataStruct,
-    mut generics: Generics,
+    base_generics: Generics,
 ) -> TokenStream {
     if data.fields.is_empty() {
         super::empty::generate(ident)
@@ -17,15 +17,16 @@ pub fn parse(
         let cident = format_ident!("{}Ctx", ident);
         let mident = format_ident!("{}_ctx", ident.to_string().to_lowercase());
 
-        let next_l = generics.lifetimes().next();
-        if !next_l.is_some() {
-            generics.params.push(GenericParam::Lifetime(
-                LifetimeDef::new(Lifetime::new("'_splitter", Span::call_site().into()))
-            ));
+        let mut generics = base_generics.clone();
+        if base_generics.lifetimes().next().is_none() {
+            generics.params.push(GenericParam::Lifetime(LifetimeDef::new(
+                Lifetime::new("'_splitter", Span::call_site().into())
+            )));
         }
 
-        let ref l = generics.lifetimes().next().expect("unreachable").lifetime;
+        let l = &generics.lifetimes().next().expect("unreachable").lifetime;
 
+        let (_, base_ty, _) = base_generics.split_for_impl();
         let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
         let (ctx, ctx_con, ge_con) = match data.fields {
@@ -42,7 +43,7 @@ pub fn parse(
                     fn default() -> Self { #ctx_con }
                 }
             }
-            impl #impl_generics StrInfo<#l> for #ident #ty_generics #where_clause {
+            impl #impl_generics StrInfo<#l> for #ident #base_ty #where_clause {
                 type Context = #mident::#cident #ty_generics;
                 fn generate(ctx: &mut Self::Context, s: &#l str) -> Self { #ge_con }
             }
