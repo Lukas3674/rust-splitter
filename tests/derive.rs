@@ -45,6 +45,16 @@ fn empty() {
 
     #[derive(StrInfo)]
     struct StrEmpty {}
+
+    #[derive(Info)]
+    struct SemiEmpty {
+        _m: PhantomData<()>,
+    }
+
+    #[derive(StrInfo)]
+    struct SemiStrEmpty {
+        _m: PhantomData<()>,
+    }
 }
 
 #[test]
