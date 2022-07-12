@@ -1,6 +1,12 @@
 
 use std::ops::Range;
 use splitter::{StrInfo, Info, StrSplitter, Splitter};
+
+#[derive(Debug, PartialEq, Info)]
+struct CustomT<'a, T> {
+    content: &'a [T],
+}
+
 #[derive(Debug, PartialEq, Info)]
 #[splitter(u8)]
 struct Custom<'a> {
@@ -17,6 +23,16 @@ struct StrCustom<'a> {
 struct TupleCustom<'a>(&'a str);
 
 fn main() {
+    let sp = Splitter::new(b"bytes example", b" ").with_info::<CustomT<u8>>();
+    assert_eq!(
+        sp.collect::<Vec<_>>(),
+        vec![
+            CustomT { content: b"bytes" },
+            CustomT { content: b" " },
+            CustomT { content: b"example" },
+        ],
+    );
+
     let sp = Splitter::new(b"bytes example", b" ").with_info::<Custom>();
     assert_eq!(
         sp.collect::<Vec<_>>(),
