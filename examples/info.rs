@@ -15,10 +15,10 @@ struct Custom<'a> {
 
 impl<'a> StrInfo<'a> for Custom<'a> {
     type Context = CustomCtx;
-    fn generate(ctx: &mut Self::Context, ts: &'a str) -> Self {
+    fn generate(ctx: &mut Self::Context, s: &'a str) -> Self {
         let start = ctx.cursor;
-        ctx.cursor += ts.len();
-        Custom { content: ts, span: start..ctx.cursor }
+        ctx.cursor += s.len();
+        Custom { content: s, span: start..ctx.cursor }
     }
 }
 

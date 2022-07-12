@@ -13,12 +13,12 @@ enum TType {
 
 impl<'a> StrInfo<'a> for TType {
     type Context = ();
-    fn generate(_ctx: &mut Self::Context, ts: &'a str) -> Self {
-        match ts {
+    fn generate(_: &mut Self::Context, s: &'a str) -> Self {
+        match s {
             " " => TType::Whitespace,
             "true" | "false" => TType::Bool,
             "||" | "&&" => TType::Operator,
-            ts if ts.chars().all(char::is_alphabetic) => {
+            s if s.chars().all(char::is_alphabetic) => {
                 TType::Idenifier
             }
             _ => TType::Unknown,

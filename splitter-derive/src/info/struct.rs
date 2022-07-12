@@ -1,7 +1,10 @@
 
-use quote::{quote, format_ident};
 use proc_macro::{TokenStream, Span};
-use syn::{Ident, DataStruct, Generics, LifetimeDef, GenericParam, Lifetime, TypeParam};
+use quote::{quote, format_ident, __private::TokenStream as TS};
+use syn::{
+    Ident, DataStruct, Generics, LifetimeDef, GenericParam, Lifetime,
+    TypeParam, Fields, FieldsNamed, FieldsUnnamed, Index,
+};
 
 pub fn parse<I: Iterator<Item = Ident>>(
     ident: Ident,
@@ -38,32 +41,44 @@ pub fn parse<I: Iterator<Item = Ident>>(
 
         let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
-        let types = data.fields.iter().map(|f| &f.ty).collect::<Vec<_>>();
-        let idents = data.fields.iter().map(|f| &f.ident).collect::<Vec<_>>();
+        let (ctx, ctx_con, ge_con) = match data.fields {
+            Fields::Unnamed(fields) => unnamed(fields, l, t),
+            Fields::Named(fields) => named(fields, l, t),
+            Fields::Unit => unreachable!(),
+        };
 
         TokenStream::from(quote! {
             mod #mident {
                 use super::*;
-                pub struct #cident #impl_generics #where_clause {
-                    #(pub(super) #idents: <#types as Info<#l, #t>>::Context,)*
-                }
+                pub struct #cident #impl_generics #where_clause #ctx
                 impl #impl_generics Default for #cident #ty_generics #where_clause {
-                    fn default() -> Self {
-                        Self { #(#idents: <#types as Info<#l, #t>>::Context::default(),)* }
-                    }
+                    fn default() -> Self { #ctx_con }
                 }
             }
             impl #impl_generics Info<#l, #t> for #ident #ty_generics #where_clause {
                 type Context = #mident::#cident #ty_generics;
-                fn generate(ctx: &mut Self::Context, ts: &#l [#t]) -> Self {
-                    Self { #(#idents: <#types as Info<#l, #t>>::generate(&mut ctx.#idents, ts),)* }
-                }
+                fn generate(ctx: &mut Self::Context, ts: &#l [#t]) -> Self { #ge_con }
             }
         })
     }
 }
 
-fn _dbg(ts: TokenStream) -> TokenStream {
-    println!("####\n\n{}\n\n####", ts);
-    ts
+fn named(fields: FieldsNamed, l: &Lifetime, t: &Ident) -> (TS, TS, TS) {
+    let (idents, types): (Vec<_>, Vec<_>) = fields.named.into_iter()
+        .map(|f| (f.ident.expect("unreachable"), f.ty)).unzip();
+    (
+        quote! { { #(pub(super) #idents: <#types as Info<#l, #t>>::Context,)* } },
+        quote! { Self { #(#idents: <#types as Info<#l, #t>>::Context::default(),)* } },
+        quote! { Self { #(#idents: <#types as Info<#l, #t>>::generate(&mut ctx.#idents, ts),)* } },
+    )
+}
+
+fn unnamed(fields: FieldsUnnamed, l: &Lifetime, t: &Ident) -> (TS, TS, TS) {
+    let (idents, types): (Vec<_>, Vec<_>) = fields.unnamed.into_iter()
+        .enumerate().map(|(i, f)| (Index::from(i), f.ty)).unzip();
+    (
+        quote! { ( #(pub(super) <#types as Info<#l, #t>>::Context,)* ); },
+        quote! { Self ( #(<#types as Info<#l, #t>>::Context::default(),)* ) },
+        quote! { Self ( #(<#types as Info<#l, #t>>::generate(&mut ctx.#idents, ts),)* ) },
+    )
 }
