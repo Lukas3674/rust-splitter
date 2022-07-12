@@ -36,13 +36,13 @@ pub trait StrInfo<'a>: Sized {
     type Context: Default;
     
     /// Generates the [`StrInfo`], based on the provided context an slice
-    fn generate(ctx: &mut Self::Context, ts: &'a str) -> Self;
+    fn generate(_: &mut Self::Context, _: &'a str) -> Self;
 }
 
 impl<'a> StrInfo<'a> for &'a str {
     type Context = ();
     #[inline]
-    fn generate(_ctx: &mut Self::Context, ts: &'a str) -> Self {
+    fn generate(_: &mut Self::Context, ts: &'a str) -> Self {
         ts
     }
 }

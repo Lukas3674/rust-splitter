@@ -21,14 +21,14 @@ where
 
 impl<'a, T, I> Info<'a, T> for PhantomData<I> {
     type Context = ();
-    fn generate(_ctx: &mut Self::Context, _ts: &'a [T]) -> Self {
+    fn generate(_: &mut Self::Context, _: &'a [T]) -> Self {
         PhantomData
     }
 }
 
 impl<'a, T> Info<'a, T> for PhantomPinned {
     type Context = ();
-    fn generate(_ctx: &mut Self::Context, _ts: &'a [T]) -> Self {
+    fn generate(_: &mut Self::Context, _: &'a [T]) -> Self {
         PhantomPinned
     }
 }

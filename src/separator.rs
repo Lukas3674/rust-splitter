@@ -14,7 +14,7 @@ pub struct SepInfo {
 pub trait Separator<T> {
     /// A separator will have to say, where the next separator in the slice
     /// is located (and what size it has), by providing a [`SepInfo`]
-    fn separate(&self, ts: &[T]) -> Option<SepInfo>;
+    fn separate(&self, _: &[T]) -> Option<SepInfo>;
 }
 
 impl<T: PartialEq> Separator<T> for T {

@@ -9,7 +9,7 @@ use std::{
 
 impl<'a, T: Clone> Info<'a, T> for Vec<T> {
     type Context = ();
-    fn generate(_ctx: &mut Self::Context, ts: &'a [T]) -> Self {
+    fn generate(_: &mut Self::Context, ts: &'a [T]) -> Self {
         ts.to_vec()
     }
 }

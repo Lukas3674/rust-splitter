@@ -36,13 +36,13 @@ pub trait Info<'a, T>: Sized {
     type Context: Default;
 
     /// Generates the [`Info`], based on the provided context an slice
-    fn generate(ctx: &mut Self::Context, ts: &'a [T]) -> Self;
+    fn generate(_: &mut Self::Context, _: &'a [T]) -> Self;
 }
 
 impl<'a, T> Info<'a, T> for &'a [T] {
     type Context = ();
     #[inline]
-    fn generate(_ctx: &mut Self::Context, ts: &'a [T]) -> Self {
+    fn generate(_: &mut Self::Context, ts: &'a [T]) -> Self {
         ts
     }
 }

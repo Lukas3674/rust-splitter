@@ -18,9 +18,9 @@ pub struct Span {
 impl<'a> StrInfo<'a> for Span {
     type Context = ctx::SpanCtx;
 
-    fn generate(ctx: &mut Self::Context, ts: &'a str) -> Self {
+    fn generate(ctx: &mut Self::Context, s: &'a str) -> Self {
         let start = ctx.0;
-        ctx.0 += ts.len();
+        ctx.0 += s.len();
         Self { start, end: ctx.0 }
     }
 }
