@@ -14,7 +14,7 @@ pub fn info(input: TokenStream) -> TokenStream {
 }
 
 /// derive macro for `StrInfo` trait
-#[proc_macro_derive(StrInfo)]
+#[proc_macro_derive(StrInfo, attributes(splitter))]
 pub fn str_info(input: TokenStream) -> TokenStream {
     str_info::parse(parse_macro_input!(input as DeriveInput))
 }

@@ -1,6 +1,6 @@
 [package]
 name = "splitter-derive"
-version = "0.1.1"
+version = "0.1.1" # TODO
 edition = "2021"
 authors = ["Lukas3674 <lukashassler@web.de>"]
 repository = "https://github.com/Lukas3674/rust-splitter"
