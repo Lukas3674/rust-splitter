@@ -27,7 +27,7 @@ where
 {
     /// internally uses a [`Splitter`] over a byte slice
     #[allow(clippy::type_complexity)]
-    splitter: Splitter<'a, u8, &'a [u8], S, fn(&'a [u8]) -> NonZeroUsize>,
+    splitter: Splitter<'a, u8, &'a [u8], S>,
     ctx: I::Context,
 }
 

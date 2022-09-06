@@ -1,6 +1,6 @@
 [package]
 name = "splitter"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Lukas3674 <lukashassler@web.de>"]
 edition = "2021"
 readme = "README.md"
@@ -27,4 +27,4 @@ derive = ["dep:splitter-derive"]
 full = ["std", "impls", "infos", "derive"]
 
 [dependencies]
-splitter-derive = { version = "0.1.5", optional = true }
+splitter-derive = { version = "0.1.6", optional = true }
