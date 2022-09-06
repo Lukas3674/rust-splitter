@@ -15,7 +15,7 @@ use core::num::NonZeroUsize;
 /// let re: Vec<&[usize]> = vec![&[1], &[2], &[3, 3], &[4]];
 /// assert_eq!(sp.collect::<Vec<_>>(), re);
 /// ```
-pub struct Splitter<'a, T, I, S, F>
+pub struct Splitter<'a, T, I, S, F = fn(&'a [T]) -> NonZeroUsize>
 where
     I: Info<'a, T>,
     S: Separator<T>,
@@ -29,7 +29,7 @@ where
     increment: F,
 }
 
-impl<'a, T, S> Splitter<'a, T, &'a [T], S, fn(&'a [T]) -> NonZeroUsize>
+impl<'a, T, S> Splitter<'a, T, &'a [T], S>
 where
     S: Separator<T>,
 {
