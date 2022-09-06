@@ -7,7 +7,7 @@ pub fn parse(
     ident: Ident,
     data: DataEnum,
 ) -> TokenStream {
-    let variants = data.variants.into_iter().map(pares_variant);
+    let variants = data.variants.into_iter().filter_map(pares_variant);
     TokenStream::from(quote! {
         impl<'_splitter> StrInfo<'_splitter> for #ident {
             type Context = ();
@@ -47,7 +47,7 @@ impl ToTokens for Pat {
     }
 }
 
-fn pares_variant(variant: Variant) -> TS {
+fn pares_variant(variant: Variant) -> Option<TS> {
     if !variant.fields.is_empty() {
         panic!("variants can't have fields")
     }
@@ -58,9 +58,5 @@ fn pares_variant(variant: Variant) -> TS {
         }));
 
     let ident = variant.ident;
-    if let Some(pat) = pat.next() {
-        quote! { #pat => Self::#ident, }
-    } else {
-        panic!("every variant needs a splitter attribute")
-    }
+    pat.next().map(|pat| quote! { #pat => Self::#ident, })
 }
