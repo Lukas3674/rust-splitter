@@ -1,5 +1,5 @@
 
-//! `Splitter` derive macro
+//! `splitter` derive macro
 
 mod info;
 mod str_info;
